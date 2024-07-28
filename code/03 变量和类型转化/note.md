@@ -375,9 +375,15 @@ fmt.Println(string(pi), string(alpha)) //output: π ά
 * 数字类型 → string
 
 情况特殊一点，为了将一串数组转换为string类型，必须将其中的每个数字都转换为相应的代码点（char）。也就是代表字符0的48~代表字符9的57。我们需要使用到strconv（代表“string conversion”）包提供的Itoa函数来完成这一工作。
+
+Itoa（Integer to ASCII）函数，可以直接将整数转换为其字符串表示
+
 ```go
 countdown := 10
 str := "Launch in T minus " + strconv.Itoa(countdown) + " seconds".
+	
+strconv.Itoa(countdown) 
+strconv.Atoi("10")
 ```
 另一种方法，使用fmt.Sprintf函数，该函数会返回格式化后的string而不是打印
 ```go

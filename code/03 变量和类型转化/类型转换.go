@@ -27,7 +27,7 @@ func main() {
 
 	//数字转string
 	//方法一
-	countdown := 10
+	countdown := 999
 	str := "Launch in T minus " + strconv.Itoa(countdown) + " seconds"
 	fmt.Println(str) //Launch in T minus 10 seconds
 
@@ -44,7 +44,7 @@ func main() {
 
 	//bool转string
 	launch := false
-	launchText := fmt.Sprintf("%v", launch)
+	launchText := fmt.Sprintf("%v %t", launch, launch)
 	fmt.Println("Ready for launch:", launchText) //Ready for launch: false
 
 }
