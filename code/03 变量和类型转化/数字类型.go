@@ -43,6 +43,7 @@ func main() {
 	fmt.Println(piggyBank == 0.3) //false
 	//解决方案
 	fmt.Println(math.Abs(piggyBank-0.3) < 0.0001) //true
+	fmt.Println("绝对值：", math.Abs(piggyBank-0.3))
 
 	/*****************************骄傲的分割线*********************************/
 	//Go会默认将整数推断成int类型
@@ -68,7 +69,17 @@ func main() {
 	//使用“大数”类型的方法1
 	lightSpeed := big.NewInt(299792)
 	fmt.Println("distance is ", lightSpeed)
+	big_num := big.NewInt(10)
+	for i := 1; i < 100; i++ {
+		big_num.Mul(big_num, big.NewInt(10))
+		fmt.Println("big_num", big_num)
+	}
+	rational_number := big.NewRat(1, 3)
+	for i := 1; i < 100; i++ {
+		rational_number.Mul(rational_number, big.NewRat(1, 3))
+		fmt.Println("rational_number", rational_number)
 
+	}
 	//使用“大数”类型的方法2
 	distance1 := new(big.Int)
 	distance1.SetString("24000000000000000000000", 10)
