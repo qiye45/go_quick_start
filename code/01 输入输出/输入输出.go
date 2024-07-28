@@ -16,11 +16,10 @@ func main() {
 
 	fmt.Println("欢迎来到数字猜谜游戏！请猜测一个0到", maxNumber-1, "之间的数字。")
 
-	var guess int
 	for attempts := 0; attempts < maxAttempts; attempts++ {
-		var guessString int
+		var guess int
 		fmt.Print("请输入你的猜测: ")
-		_, _ = fmt.Scanln(&guessString)
+		fmt.Scan(&guess)
 
 		if guess < 0 || guess >= maxNumber {
 			fmt.Printf("猜测范围错误。请猜一个0到%d之间的数字。\n", maxNumber-1)
