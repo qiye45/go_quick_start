@@ -269,3 +269,140 @@ const distance = 240000000000000000000000
 fmt.Println("Andromeda Galaxy is ", distance/299792/86400)  //output: Andromeda Galaxy is  9265683466462
 ```
 
+# 基本类型之字符串类型
+
+## string类型
+
+关于字符串类型（string），和其他语言一样没什么区别，使用双引号包起来，如
+```go
+peace := "peace"
+var peace = "peace"
+var peace string = "peace"
+```
+使用双引号包起来的字符串称为“字符串字面量”。“字符串字面量”中可以包含转义字符，比如说 `\n` 可以表示换行。另外一种表示字符串字面量的方法是使用反引号`，这种称为“原始字符串字面量”。使用``，可以方便的定义跨行字符串，如
+```go
+fmt.Println(`
+peace be upon you
+upon you be peace`)
+```
+“字符串字面量”和“原始字符串字面量”都是string类型。
+
+## 字符、代码点、符文和字节
+* 都知道计算机中字符是通过编码存取的，也就是每个字符都使用一个特定的数字表示。比如A就是65，那么书中将这个65称为字符A的**代码点**。
+* rune类型（Rune type 符文类型）：Go中使用rune类型来表示字符的代码点，该类型本质上是int32类型的别名，也就是说rune和int32可以相互转换
+* byte类型：Go中的byte类型不仅可以表示二进制数据，而且被拿来表示ASCII码（ASCII共包含128个字符）。本质上byte类型是uint8类型的别名
+```go
+var pi rune = 960
+var alpha rune = 940
+var omega rune = 969
+var bang byte = 33
+
+fmt.Printf("%v %v %v %v\n", pi, alpha, omega, bang) //960 940 969 33
+//通过使用格式化变量%c，可以将代码点表示成字符
+fmt.Printf("%c %c %c %c\n", pi, alpha, omega, bang) //π ά ω !
+```
+在Go中使用单引号来表示字符字面量，如果用户声明一个字符变量而没有为其制定类型，那么Go会将其推断成rune类型。下面三种写法是一样的功能。
+```go
+grade := 'A'
+var grade = 'A'
+var grade rune = 'A'
+```
+
+## 字符串无法修改
+字符串虽然是有字符“串”起来的，但是和C#、java等语言一样，Go中的字符串类型也是不可修改的。
+```go
+//通过索引的方式访问字符串中的字符
+message := "shalom"
+c := message[5]
+fmt.Printf("%c\n", c)
+
+//字符串不可被修改
+//message[5] = 'd'  //报错：cannot assign to message[5]
+```
+
+## 字符串与符文
+Golang中字符串使用UTF-8编码。UTF-8是一种变长的编码方式，也就是说每个字符可能占用不同的字节长度。比如常见的中文字符通常需要占据3个字节长度，而英文字符或者数字则只需要占据1个字节长度。有些特殊字符可能占4个字节。
+为了方便，Go为此提供了utf包，里面提供了两个实用的方法
+* RuneCountInString函数，能够返回字符串中Unicode字符（符文）的个数，而不是像len方法一样返回字节的长度。
+* DecodeRuneInString函数，解码字符串的首个Unicode字符并返回解码后的字符及其占用的字节长度。
+```go
+question := "今天星期几？"
+fmt.Println(len(question), "bytes")                    //18 bytes
+fmt.Println(utf8.RuneCountInString(question), "runes") //6 runes
+
+c, size := utf8.DecodeRuneInString(question)
+fmt.Printf("First rune: %c %v bytes", c, size) //First rune: 今 3 bytes
+
+//遍历字符串，挨个打印出来
+for i, c := range question {
+    fmt.Printf("%v %c\n", i, c)
+}
+```
+上面的示例中使用到了`range`关键字来进行遍历操作，其中`i`为索引，`c`为值。有点python的味道。
+
+
+
+# 基本类型之类型转换
+
+Go中与其他强类型语言（比如C#）类似，类型之间进行操作时，需要经过类型转换否则会报“类型不匹配”的错误。
+
+## 数字类型转换
+* 整数类型 → 浮点类型：
+
+```go
+age := 41
+marsAge := float64(age)
+```
+---
+* 浮点类型 → 整数类型：  
+
+【注意】：浮点型的小数部分是被截断，而不是四舍五入
+```go
+earthDays := 365.2425
+fmt.Println(int(earthDays)) //output: 365
+```
+在数值类型进行转换时，一样要注意超出范围的问题，比如一个较大float64转成int16时。
+
+## 字符串转换
+* rune/byte → string
+
+```go
+var pi rune = 960
+var alpha rune = 940
+fmt.Println(string(pi), string(alpha)) //output: π ά
+```
+---
+* 数字类型 → string
+
+情况特殊一点，为了将一串数组转换为string类型，必须将其中的每个数字都转换为相应的代码点（char）。也就是代表字符0的48~代表字符9的57。我们需要使用到strconv（代表“string conversion”）包提供的Itoa函数来完成这一工作。
+```go
+countdown := 10
+str := "Launch in T minus " + strconv.Itoa(countdown) + " seconds".
+```
+另一种方法，使用fmt.Sprintf函数，该函数会返回格式化后的string而不是打印
+```go
+countdown := 9
+str := fmt.Sprintf("Launch in T minus %v seconds", countdown)
+fmt.Println(str) //Launch in T minus 9 seconds
+```
+> 注：使用 `strconv.Itoa()` 比 `fmt.Sprintf()` 要快一倍左右
+---
+* string → 数字
+一种不太常用的转换，也是使用strconv包的Atoi函数
+```go
+count, err := strconv.Atoi("10")
+if err != nil {
+    //出错
+}
+fmt.Println(count) //10
+```
+上面这种写法是之后经常看到的，是Go处理异常的一种常用写法。由于Go的函数可以返回多个值，一般会将可能产生的异常一并返回。
+
+## 布尔类型转换
+如果使用`fmt`的`Print`系函数直接打印bool类型，会输出true或false的文本
+```go
+launch := false
+launchText := fmt.Sprintf("%v", launch)
+fmt.Println("Ready for launch:", launchText) //Ready for launch: false
+```
+某些语言中会把1和0当做true和false，Go中是不行的。
