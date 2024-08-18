@@ -56,7 +56,7 @@ fmt.Println(186, "seconds")
 其函数声明如下：
 > func Println(a ...interface{}) (n int, err error)
 1. ...表示函数的参数的数量是可变的
-2. 参数a的类型为`interface{}`，是一个空接口。空接口可以接收所有类型
+2. **参数a的类型为`interface{}`，是一个空接口。空接口可以接收所有类型**
 > 所以，...和interface{}结合到一起，就可以接收任意数量任意类型的参数
 看个简单的例子
 ```go
