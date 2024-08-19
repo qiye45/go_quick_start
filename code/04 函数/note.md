@@ -28,10 +28,10 @@ func main() {
 > func Unix(sec, nsec int64) Time
 
 #### 多返回值形式
-在上一节遇到的函数`countdown, err := strconv.Atoi("10")`就是一种多返回值的函数，其声明的写法是
+在上一节遇到的函数`countdown, err := strconv.Atoi("10")`就是一种多返回值的函数，其声明的写法是(ASCII to integer)
 > func Atoi(s string) (i int, err error) 
 
-多个返回值写在括号内，并且返回值可以将名字去掉只保留类型：
+**多个返回值写在括号内，并且返回值可以将名字去掉只保留类型：**
 > func Atoi(s string) (int, error)
 
 举个简单的例子
@@ -81,12 +81,14 @@ func main() {
 ## 声明新类型
 ### 通过`type`关键字来声明新的类型
 通过`type`关键字，指定名称和一个底层类型便可以声明一个新的类型。
+> type celsius float64
+> 关键字  名称 底层类型  
 ```go
 type celsius float64
 var temperature celsius = 20
 fmt.Println(temperature)
 ```
-如上，声明了一个摄氏度的新类型叫celsius，由于数字字面量20是一个无类型常量，所以int，float64类型或者其他数字类型都可以将其做值。有因为celsius类型和float64具有相同的行为，可以把其当做float64来使用
+如上，声明了一个摄氏度的新类型叫celsius，由于数字字面量20是一个无类型常量，所以int，float64类型或者其他数字类型都可以将其做值。又因为celsius类型和float64具有相同的行为，可以把其当做float64来使用
 ```go
 const degrees = 20
 var temperature2 celsius = degrees
@@ -94,6 +96,7 @@ temperature2 += 10
 fmt.Println(temperature2) //30
 ```
 **【注意】** 虽然声明的新类型和声明时指定的底层类型具有相同的行为与表示，但是这和前面提过的类型别名不同，通过type关键字声明的类型就是一个全新的类型。所以尝试把celsius和float64一起使用会报错“类型不匹配”
+fahrenheit 华氏温度 celsius 摄氏
 ```go
 var warmUp float64 = 10
 temperature += warmUp   //报错
@@ -143,7 +146,7 @@ func (k kelvin) celsius() celsius{
 }
 ```
 这里的k称为接收者（receiver），每个方法可以有多个参数，但是只能有一个接收者。   
-![方法声明](https://github.com/Xuhy0826/Golang-Study/blob/master/resource/methodDeclare.png)
+![方法声明](./img.png)
 
 在声明好方法之后，类型kelvin就可以直接调用方法了，用起来就和在类中定义了方法很类似。
 ```go

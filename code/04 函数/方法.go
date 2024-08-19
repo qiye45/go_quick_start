@@ -31,18 +31,18 @@ func main() {
 
 	//celsius与float64不能混用
 	//var warmUp float64 = 10
-	//temperature += warmUp //报错
+	//temperature += warmUp //报错 invalid operation: temperature += warmUp (mismatched types celsius and float64)
 
 	//通过自定义类型可提高代码的可读性，比如20摄氏度和20华氏度就不是一回事儿
-	//type fahrenheit float64
+	type fahrenheit float64
 
 	//var c celsius = 20
 	//var f fahrenheit = 20
 
-	// if c == f {  //报错
-
-	// }
-	// c += f  //报错
+	//if c == f { //报错 invalid operation: c == f (mismatched types celsius and fahrenheit)
+	//
+	//}
+	//c += f //报错 invalid operation: c += f (mismatched types celsius and fahrenheit)
 
 	//使用引入了新类型的函数
 	var k kelvin = 294.0

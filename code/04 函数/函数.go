@@ -12,8 +12,16 @@ func kelvinToCelsius(k float64) float64 {
 }
 
 // addAll 多数相加
-func addAll(a int, numbers ...int) int {
-	sum := a
+//
+//	func addAll(a int, numbers ...int) int {
+//		sum := a
+//		for _, v := range numbers {
+//			sum += v
+//		}
+//		return sum
+//	}
+func addAll(numbers ...int) int {
+	sum := 0
 	for _, v := range numbers {
 		sum += v
 	}
