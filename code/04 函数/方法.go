@@ -13,9 +13,14 @@ func kelvinToCelsius2(k kelvin) celsius {
 	return celsius(k - 273.15) //需要使用类型转换
 }
 
-// 为kelvin类型声明方法
+// 为kelvin类型声明方法，
 func (k kelvin) celsius() celsius {
 	return celsius(k - 273.15)
+}
+
+// 为kelvin类型添加方法，用于打印温度
+func (k kelvin) print() {
+	fmt.Println(k, "°K is", k.celsius(), "°C")
 }
 
 func main() {
@@ -52,4 +57,5 @@ func main() {
 	//使用方法
 	c1 := k.celsius()
 	fmt.Println(k, "°K is", c1, "°C") //294 °K is 20.850000000000023 °C
+	k.print()
 }
