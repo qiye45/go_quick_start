@@ -76,9 +76,11 @@ func main() {
 
 	for _, tt := range tests {
 		//got := addAll2(tt.numbers) 变成传入数组[[]]
-		got := addAll2(tt.numbers...)
+		//got := addAll2(tt.numbers...)
 		//fmt.Println(got.String())
-		fmt.Printf("addAll2(%v) = %v, want %v\n", tt.numbers, got, tt.want)
+		//fmt.Printf("addAll2(%v) = %v, want %v\n", tt.numbers, got, tt.want)
+		got := addAll3(tt.numbers...)
+		fmt.Printf("addAll3(%v) = %v, want %v\n", tt.numbers, got, tt.want)
 
 	}
 
