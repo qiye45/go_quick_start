@@ -29,7 +29,7 @@ func measureTemperature(samples int, sensor func() Kelvin) {
 	}
 }
 
-// 匿名函数
+// 匿名函数（不能设置函数参数的默认值）
 var f = func() {
 	fmt.Println("Dress up for the masquerade")
 }
