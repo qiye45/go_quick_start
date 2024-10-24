@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"time"
 )
 
 type Kelvin float64
@@ -25,7 +24,7 @@ func measureTemperature(samples int, sensor func() Kelvin) {
 		k := sensor()
 		fmt.Printf("%v° K\n", k)
 		//time.Sleep(2 * time.Second)  // 秒（时间单位）
-		time.Sleep(time.Second)
+		//time.Sleep(time.Second)
 	}
 }
 
@@ -36,12 +35,16 @@ var f = func() {
 
 // sensor函数类型
 type sensor func() Kelvin
+type sensor2 func()
 
 // 声明并返回一个匿名函数
 func calibrate(s sensor, offset Kelvin) sensor {
 	return func() Kelvin {
 		return s() + offset
 	}
+}
+func calibrate2(s sensor2) {
+	s()
 }
 
 func main() {
@@ -70,9 +73,12 @@ func main() {
 
 	//将匿名函数的声明和执行放在一起写
 	func() {
-		fmt.Println("function anonymous")
+		fmt.Println("function anonymous 匿名函数（自动执行）")
 	}() //function anonymous
 
 	newSensor := calibrate(realSensor, 5)
 	fmt.Println(newSensor()) //5
+	// 自定义类型
+	calibrate2(f) //Dress up for the masquerade
+
 }

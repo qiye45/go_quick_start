@@ -82,7 +82,8 @@ func main() {
 ### 通过`type`关键字来声明新的类型
 通过`type`关键字，指定名称和一个底层类型便可以声明一个新的类型。
 > type celsius float64
-> 关键字  名称 底层类型  
+> 
+> **关键字  名称 底层类型**  
 ```go
 type celsius float64
 var temperature celsius = 20
@@ -160,7 +161,18 @@ var k kelvin = 294.0
 c := k.celsius()
 fmt.Println(k, "°K is", c, "°C") //294 °K is 20.850000000000023 °C
 ```
+不同于传统OOP：
 
+Go没有类（class）的概念
+但可以为自定义类型添加方法
+这些方法可以直接通过类型变量调用
+
+
+接收者（receiver）:
+
+k 是接收者，代表调用该方法的具体实例
+一个方法只能有一个接收者
+接收者相当于其他语言中的 this 或 self
 
 # 一等函数
 
@@ -208,6 +220,8 @@ func main() {
 另外，之所以能将`realSensor`重新赋值给`sensor`,是由于`realSensor`和`fakeSensor`具有相同的函数签名。
 
 ## 将函数传递给其他函数
+**函数传递其他函数**
+
 因为变量既可以指向函数，又可以作为参数传递给函数，那么在Go中函数也可以作为参数传递给其他函数。可以联想下C#中委托的一种用法。   
 【示例2——function-parameter.go】
 ```go
@@ -267,6 +281,7 @@ func main() {
 }
 ```
 因为函数字面量需要保留外部作用域的变量引用，所以函数字面量都是闭包的。看一下闭包的示例。
+**固定函数变量**
 ```go
 type kelvin float64
 type sensor func() kelvin
