@@ -24,6 +24,13 @@ func fixedParameter(f AddFunc, offset int64) AddFunc {
 //	}
 //}
 
+// 使用闭包固定参数 b
+func fixedB(f AddFunc, fixedB int64) func(int64) int64 {
+	return func(a int64) int64 {
+		return f(a, fixedB)
+	}
+}
+
 func main() {
 	// 加上偏移量10
 	fixedAdd := fixedParameter(add, 10)
@@ -31,4 +38,11 @@ func main() {
 	// 传入a,b
 	result := fixedAdd(1, 1)
 	fmt.Println(result)
+
+	// 固定b=5
+	fixedAddB := fixedB(add, 5)
+	// 传入a
+	result = fixedAddB(10)
+	fmt.Println(result) // 输出15, 因为 10 + 5 = 15
+
 }
