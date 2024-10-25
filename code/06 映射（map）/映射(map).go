@@ -1,0 +1,109 @@
+package main
+
+import (
+	"fmt"
+	"math"
+	"sort"
+)
+
+func main() {
+	fmt.Println("lesson13 map")
+
+	//声明map，使用复合字面量的声明方式
+	temperature := map[string]int{
+		"Mars":  -65,
+		"Earth": 15,
+	}
+	//读
+	temp := temperature["Earth"]
+	fmt.Printf("On avarage the Earth is %v C \n", temp) //On avarage the Earth is 15 C
+
+	//写
+	temperature["Mars"] = 16
+	temperature["Vemus"] = 464
+
+	fmt.Println(temperature) //map[Earth:15 Mars:16 Vemus:464]
+
+	//如果访问不存在的键，则反映值类型的零值
+	fmt.Println(temperature["Moon"]) //0
+
+	//逗号与ok
+	if moon, ok := temperature["Moon"]; ok {
+		fmt.Printf("On avarage the Earth is %v C \n", moon)
+	} else {
+		fmt.Println("Where is the moon?")
+	}
+
+	//map是不会被复制的
+	planets := map[string]string{
+		"Earth": "Sector ZZ9",
+		"Mars":  "Sector ZZ9",
+	}
+	planetsMarkII := planets
+	planets["Earth"] = "Whoops"
+	fmt.Println(planets)       //map[Earth:Whoops Mars:Sector ZZ9]
+	fmt.Println(planetsMarkII) //map[Earth:Whoops Mars:Sector ZZ9]
+
+	//移除map中的元素（key-value对）
+	delete(planets, "Earth")
+	delete(planets, "Moon")    //移除不存在的元素，不会引发panic
+	fmt.Println(planets)       //map[Mars:Sector ZZ9]
+	fmt.Println(planetsMarkII) //map[Mars:Sector ZZ9]
+
+	//综合实例
+	temperatures := []float64{
+		-28.0, 32.0, -31.0, -29.0, -23.0, -28.0, -33.0,
+	}
+	//键：float64，值；[]float64
+	groups := make(map[float64][]float64)
+
+	for _, t := range temperatures {
+		g := math.Trunc(t/10) * 10 //将温度按10度的跨度进行分组
+		groups[g] = append(groups[g], t)
+	}
+
+	for g, temperatures := range groups {
+		fmt.Printf("%v : %v\n", g, temperatures)
+	}
+	// 二维数组
+	//two_dimensional_array := map[int] [10][10]int{}
+	//for i := 0; i < 10; i++ {
+	//	var temp_array [10][10]int
+	//	for j := 0; j < 10; j++ {
+	//		temp_array[i][j] = i * j
+	//	}
+	//	two_dimensional_array[i] = temp_array
+	//}
+	//fmt.Println(two_dimensional_array)
+	/*
+		上例输出结果：
+		-20 : [-28 -29 -23 -28]
+		30 : [32]
+		-30 : [-31 -33]
+	*/
+
+	//示例：将切片去重并排序，在Go中没有set，但是可以使用map来实现set的功能
+	numbers := []float64{
+		51.02, 10.2, -5.2, -10.4, 14.2, 10.2, 5.12, 51.02, -30.0, 4.3,
+	}
+
+	set := make(map[float64]bool)
+
+	for _, t := range numbers {
+		set[t] = true
+	}
+
+	unique := make([]float64, 0, len(set))
+	// key
+	for t := range set {
+		unique = append(unique, t)
+	}
+	// key,value
+	//for f, b := range set {
+	//	fmt.Println(f, b)
+	//}
+	//排序
+	sort.Float64s(unique)
+	fmt.Println(unique) //[-30 -10.4 -5.2 4.3 5.12 10.2 14.2 51.02]
+
+}
