@@ -136,7 +136,7 @@ func main() {
 	fmt.Printf("jack's salary is %v now\n", jack.salary()) //jack's salary is 5000 now
 ```
 其实像上面这样来实现方法的转发还是较为麻烦，Go语言中可以通过**struct嵌入**来实现方法的转发。
-* 实现struct嵌入的写法：在struct中只给定字段类型，不写字段名即可。不写字段名的话，就是默认使用这个类型名称作为其字段的名称了。
+* 实现**struct嵌入的写法：在struct中只给定字段类型，不写字段名即可**。不写字段名的话，就是默认使用这个类型名称作为其字段的名称了。
 改写之前的`employee`来实现struct转发，这次我们就不需要再为`employee`手动绑定`salary()`方法了。
 ```go
 type employee struct {
@@ -201,10 +201,10 @@ func (dept department) salary() int64 {
 func main() {
     ··· 
 
-	fmt.Printf("jack's salary is %v now\n", jack.salary()) //这里就会报错了：ambiguous selector
+	fmt.Printf("jack's salary is %v now\n", jack.salary()) //这里就会报错了：ambiguous selector 模棱两可的选择器
 }
 ```
-为了解决这种情况，要么避免使用到同名方法，要么就在单独为“父类型”`employee`显式的声明一个`salary()`方法。
+为了解决这种情况，要么**避免使用到同名方法**，要么就在**单独为“父类型”`employee`显式的声明一个`salary()`方法**。
 ```go
     ··· 
 
@@ -222,7 +222,8 @@ func main() {
 
 ## 使用组合还是继承
 引经据典，大佬们这么说的：   
-· 优先使用对象组合而不是类的继承
+**· 优先使用对象组合而不是类的继承**
+
 > Favor object composition over class inheritance   ——Gang of Four
 
 · 对传统的继承不是必须的；所有使用继承解决的问题都可以使用其他方法解决
@@ -232,8 +233,10 @@ func main() {
 # 接口
 
 ## 接口类型
-和其他常见的编程语言一样，Go也有接口，并且其含义是类似的。类型通过方法来表达自己的行为，而接口是来规定类型必须满足的方法，就像是一种约束或者契约。  
+和其他常见的编程语言一样，Go也有接口，并且其含义是类似的。**类型通过方法来表达自己的行为，而接口是来规定类型必须满足的方法，就像是一种约束或者契约。**  
+
 首先如何声明接口。使用的关键字是毫无意外的`interface`。
+
 ```go
 var t interface {
 	talk() string
@@ -265,7 +268,26 @@ func main() {
 }
 ```
 `martian`和`laser`两个完全不同的类型都关联了一个空入参且返回参数为`string`的`talk`方法，那么它们就都可以被赋值给变量`t`。
-* 为了复用，一般会将接口声明为类型。按照惯例，接口类型的名称常常以`-er`作为后缀。举个例子
+
+```
+通过类型断言转换回原始的具体类型
+t.(martian).temp
+
+带检查的类型断言（更安全）：
+// 方式 2 
+if originalType, ok := t.(martian); ok {
+    // 转换成功
+    fmt.Println(originalType.temp)
+} else {
+    // 转换失败
+    fmt.Println("t 不是 martian 类型")
+}
+```
+
+* 为了复用，一般会将接口声明为类型。按照惯例，**接口类型的名称常常以`-er`作为后缀**。举个例子
+
+
+
 ```go
 ···
 
@@ -286,7 +308,8 @@ func main() {
 ```
 上一节学习了struct嵌入的特性，下面将满足接口的类型嵌入另一个struct中
 ```go
-···
+// 满足接口t（2）
+type laser int
 
 type starship struct {
 	laser

@@ -38,9 +38,9 @@ func (acc account) salary() int64 {
 }
 
 //为employee类型绑定方法，转发account的salary方法
-// func (e employee) salary() int64 {
-// 	return e.account.salary()
-// }
+//func (e employee) salary() int64 {
+//	return e.account.salary()
+//}
 
 // 解释“命名冲突”
 // 继续为department绑定一个同名的salary方法
