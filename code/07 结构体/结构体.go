@@ -16,6 +16,7 @@ type locationV2 struct {
 	Long float64
 }
 
+// 反引号
 type locationV3 struct {
 	Lat  float64 `json:"latitude"`
 	Long float64 `json:"longitude"`
