@@ -241,8 +241,11 @@ func main() {
 var t interface {
 	talk() string
 }
+
+**方法名 返回值(string 类型)**
 ```
 无论什么类型，只要存在满足接口的方法，就能成为变量`t`的值。
+
 ```go
 //类型martian 满足了接口t 
 type martian struct{}
@@ -321,7 +324,7 @@ func main() {
 	shout(s)              //PEW PEW
 }
 ```
-`laser`嵌入`starship`中，那么直接调用`starship`的`talk()`方法会将`laser`的`talk()`自动转发。更牛逼的是，通过这个转发让`starship`间接的满足了`talker`接口，所以就可以当做入参传入`shout`函数中了。
+**`laser`嵌入`starship`中，那么直接调用`starship`的`talk()`方法会将`laser`的`talk()`自动转发。更牛逼的是，通过这个转发让`starship`间接的满足了`talker`接口，所以就可以当做入参传入`shout`函数中了。**
 
 ## 探索接口
 先顺路看一下Go的时间类型。需要引入time包。
@@ -355,10 +358,11 @@ func main() {
 	fmt.Printf("%.1f 探险号飞船着陆\n", xstardate(today)) //output: 1328.9 探险号飞船着陆
 }
 ```
-但是现在就存在一个问题了，这个函数只能将“地球时间”进行转换，因为入参类型是固定的`time.Time`。为了达到通用性来解决这个问题，就可以使用接口。   
+**但是现在就存在一个问题了，这个函数只能将“地球时间”进行转换，因为入参类型是固定的`time.Time`。为了达到通用性来解决这个问题，就可以使用接口。**   
 先声明接口。
+
 ```go
-type xstadater interface {
+type xstardater interface {
 	YearDay() int
 	Hour() int
 }
@@ -392,6 +396,13 @@ func main() {
 ```
 从这里也可以看出Go的灵活，像Java、C#这样的语言可不能将时间类型显示声明自己实现了`xstardater`接口。
 
+```
+fmt.Println(t.YearDay())                               //301
+fmt.Println(t.Hour())                                  //23
+```
+
+**实现相同方法，用接口**
+
 ## 满足接口
 Go标准库导出了很多只有单个方法的接口，可以在自己的代码中实现它们。
 > Go通过简单的、通常只有单个方法的接口······来鼓励组合而不是继承，这些接口在各个组件之间形成了简明易懂的界限。 —— Rob Pike   
@@ -419,7 +430,9 @@ func main() {
 ```
 
 ## 嵌入类型和接口的实现
-前面`starship`的例子也看到，由于Golang的嵌入类型的方法提升，如果内部类型实现了接口，那么外部类型也可以“间接”实现接口。看下面的示例
+前面`starship`的例子也看到，由于Golang的嵌入类型的方法提升，**如果内部类型实现了接口，那么外部类型也可以“间接”实现接口。**看下面的示例
+
+**为父类添加函数，子类也可以调用**
 
 ```go
 package main

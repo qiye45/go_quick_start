@@ -48,13 +48,13 @@ type starship struct {
 // 	return 1000 + doy + h
 // }
 
-type xstadater interface {
+type xstardater interface {
 	YearDay() int
 	Hour() int
 }
 
 // 将“地球时间”转成“x星时间”（好版本）
-func xstardate(t xstadater) float64 {
+func xstardate(t xstardater) float64 {
 	doy := float64(t.YearDay())
 	h := float64(t.Hour()) / 24.0
 	return 1000 + doy + h
@@ -87,15 +87,16 @@ func main() {
 
 	//顺路探究下时间类型
 	t := time.Now()
-	fmt.Println(t) //2020-11-23 22:51:33.8848173 +0800 CST m=+0.003079501
+	fmt.Println("时间：", t) //2020-11-23 22:51:33.8848173 +0800 CST m=+0.003079501
 	//格式输出
-	fmt.Println(t.Format("2006-01-02 15:04:05")) //2020-11-23 22:51:33
-	fmt.Println(time.Now().Unix())               //1606143093
-	fmt.Println(t.Year())                        //2020
-	fmt.Println(t.YearDay())                     //328
-	fmt.Println(t.Month())                       //November
-	fmt.Println(t.Date())                        //2020 November 23
-	fmt.Println(t.Day())                         //23
+	fmt.Println("格式化时间：", t.Format("2006-01-02 15-04-05")) //2020-11-23 22:51:33
+	fmt.Println(time.Now().Unix())                         //1606143093
+	fmt.Println(t.Year())                                  //2024
+	fmt.Println(t.YearDay())                               //301
+	fmt.Println(t.Month())                                 //November
+	fmt.Println(t.Date())                                  //2024 October 27
+	fmt.Println(t.Day())                                   //27
+	fmt.Println(t.Hour())                                  //23
 
 	today := time.Date(2020, 11, 23, 22, 59, 10, 0, time.UTC)
 	fmt.Println(today) //2020-11-23 22:59:10 +0000 UTC
