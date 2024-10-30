@@ -3,8 +3,9 @@
 通过3个在实际工程中可以使用的包来理解不同的并发模式。
 
 ## runner
-可创建一个执行任务的对象，称为`runner`。`runner`可以接收多个任务并在后台依次执行。在执行过程中可以通过向其发送终止信号结束执行。如果执行耗时超过了初始设定的超时时间，也会结束执行。这是一种很有用的模式，接下来就是如何构建这个`runner`的示例。其中如何判断执行时间是否超时和是否有终止信号都是通过通道来监视的。   
+**可创建一个执行任务的对象**，称为`runner`。**`runner`可以接收多个任务并在后台依次执行。在执行过程中可以通过向其发送终止信号结束执行。如果执行耗时超过了初始设定的超时时间，也会结束执行。**这是一种很有用的模式，接下来就是如何构建这个`runner`的示例。其中如何判断执行时间是否超时和是否有终止信号都是通过通道来监视的。   
 在设计上，可支持以下终止点：
+
 * 程序可以在分配的时间内完成工作，正常终止；
 * 程序没有及时完成工作，“自杀”；
 * 接收到操作系统发送的中断事件，程序立刻试图清理状态并停止工作。
@@ -25,6 +26,7 @@ type Runner struct {
 }
 ```
 `interrupt` 通道收发 `os.Signal` 接口类型的值，用来从主机操作系统接收中断事件。其中`os.Signal`接口类型是用来从主机操作系统中接收中断事件的。
+
 ```go
 type Signal interface {
     String() string
@@ -34,6 +36,7 @@ type Signal interface {
 `complete`是一个收发`error`接口类型值的通道。当执行过程中发生错误会将错误传入通道。`main`函数便可获取错误。如果正常执行完任务，便返回一个nil值。  
 `timeout`是用来监视超时的通道。达到初始设定的超时时间，通道中可获取到值，此时runner便会终止任务。  
 下面，针对可能发生的错误类型预先定义好两个错误变量
+
 ```go
 // 超时的错误，这个错误值会在收到超时事件时返回
 var ErrTimeOut = errors.New("received timeout")
@@ -53,10 +56,11 @@ func New(timeout time.Duration) *Runner {
 }
 ```
 在`New`函数中初始化了`Runner`的所有通道，其中`task`字段的零值是`nil`，已经满足初始化的要求，所以没有被明确初始化。  
-但是值得注意的是 `interrupt` 通道被初始化为缓冲区容量为 1 的通道。这是因为这可以保证通道至少能接收一个来自语言运行时的 `os.Signal` 值，确保语言运行时发送这个事件的时候不会被阻塞。  
+**但是值得注意的是 `interrupt` 通道被初始化为缓冲区容量为 1 的通道。这是因为这可以保证通道至少能接收一个来自语言运行时的 `os.Signal` 值，确保语言运行时发送这个事件的时候不会被阻塞。**  
 但是 `complete` 通道被初始化为无缓冲的通道，是因为需要使用它来控制我们整个程序是否终止。
 接下来为Runner类型关联几个需要的方法。  
 （1）注册任务
+
 ```go
 // Add 为 Runner 添加任务。任务是一个接收一个int类型的ID作为参数的函数
 func (r *Runner) Add(tasks ...func(int)) {
@@ -94,8 +98,9 @@ func (r *Runner) gotInterrupt() bool {
 	}
 }
 ```
-值得注意的是，`gotInterrupt`方法中用到了带`default`分支的`select`语句。在没有`default`的`select`语句中，如果等待的几个通道都没有值的话就会阻塞。如果有`default`，通道都没有值的话，就会执行 `default` 分支。  
+值得注意的是，`gotInterrupt`方法中用到了带`default`分支的`select`语句。在没有`default`的`select`语句中，如果等待的几个通道都没有值的话就会阻塞。**如果有`default`，通道都没有值的话，就会执行 `default` 分支**。  
 （3）公开方法`Start`，开启runner执行
+
 ```go
 // Start 执行所有任务，并且监视通道事件
 func (r *Runner) Start() error {
@@ -121,8 +126,22 @@ func (r *Runner) Start() error {
 > 声明：`func Notify(c chan<- os.Signal, sig ...os.Signal)`
 > Notify函数让signal包将输入信号转发到c。如果没有列出要传递的信号，会将所有输入信号传递到c；否则只传递列出的输入信号。
 
-`Start`方法中声明了一个匿名函数，并单独启动`goroutine`来执行。在 `goroutine` 的内部调用了`run`方法，并将这个方法返回的`error`接口值发送到`complete`通道。创建 goroutine 后，`Start`进入一个`select`语句，阻塞等待两个事件中的任意一个。如果从`complete`通道接收到`error`接口值，那么该 goroutine 要么在规定的时间内完成了分配的工作，要么收到了操作系统的中断信号。无论哪种情况，收到的`error`接口值都会被返回，随后方法终止。如果从`timeout`通道接收到`time.Time`值，就表示 goroutine 没有在规定的时间内完成工作。这种情况下，程序会返回`ErrTimeout`变量。  
+`Start`方法中声明了一个匿名函数，并单独启动`goroutine`来执行。在 `goroutine` 的内部调用了`run`方法，并将这个方法返回的`error`接口值发送到`complete`通道。**创建 goroutine 后，`Start`进入一个`select`语句，阻塞等待两个事件中的任意一个**。如果从`complete`通道接收到`error`接口值，那么该 goroutine 要么在规定的时间内完成了分配的工作，要么收到了操作系统的中断信号。无论哪种情况，收到的`error`接口值都会被返回，随后方法终止。如果从`timeout`通道接收到`time.Time`值，就表示 goroutine 没有在规定的时间内完成工作。这种情况下，程序会返回`ErrTimeout`变量。  
+
+解释
+
+```
+在这段代码中，go func() { r.complete <- r.run() }() 启动了一个新的 goroutine 来执行 r.run() 方法，并将其返回的结果传递到 r.complete 通道中。这个 goroutine 的目的是让任务执行在一个独立的协程中进行，从而允许主函数 Start() 在执行过程中不会被阻塞，且可以监控任务是否超时或中断。
+
+代码分析和示例
+假设 r.run() 方法是一个耗时的操作，例如处理一个批量数据下载任务。在主线程中，Start() 函数使用 select 语句来监听两个通道事件：
+
+**任务完成：**如果任务完成 (<-r.complete 收到消息)，则 Start() 返回任务的结果（如无错误则返回 nil）。
+**任务超时：**如果任务在特定的超时时间内未完成，<-r.timeout 会触发，返回 ErrTimeout 表示任务超时。
+```
+
 下面可以看到，在main.go中如何使用Runner来执行任务。
+
 ```go
 package main
 
@@ -165,8 +184,9 @@ func createTask() func(int) {
 
 ```
 ## pool
-pool包用于展示如何使用有缓冲的通道实现资源池，来管理可以在任意数量的`goroutine`之间共享及独立使用的资源。想想很多地方都会有资源池的实践，最常见的比如数据库的连接池，网络连接池。当一个`goroutine`需要从池中获取一个资源，可以向池中申请，使用完再归还到池中。  
+pool包用于展示如何使用**有缓冲的通道实现资源池，来管理可以在任意数量的`goroutine`之间共享及独立使用的资源**。想想很多地方都会有资源池的实践，最常见的比如数据库的连接池，网络连接池。当一个`goroutine`需要从池中获取一个资源，可以向池中申请，使用完再归还到池中。  
 首先定义资源池的结构体，其中包含四个字段。
+
 ```go
 // Pool 管理一组可以安全地在多个goroutine间共享的资源。且资源必须实现了io.Closer接口
 type Pool struct {
@@ -206,12 +226,13 @@ func New(fn func() (io.Closer, error), size uint) (*Pool, error) {
 显而易见，在创建资源池时要指定池的大小，并且指定生成资源的方法。   
 定义好结构体之后，接下来为其关联3个必要的方法，分别是`获取资源`,`释放资源`,`关闭资源池`。而且必须要做好线程安全。  
 （1）获取资源的方法`Acquire`
+
 ```go
 // Acquire 从池中获取资源
 func (p *Pool) Acquire() (io.Closer, error) {
 	select {
 	// 先检查池中是否还有空闲的资源
-	case r, ok := <-p.resources:
+	case r, ok := <-p.resources :
 		log.Println("Acquire:", "Shared Resource")
 		if !ok {
 			return nil, ErrPoolClosed
@@ -276,8 +297,11 @@ func (p *Pool) Close() {
 	}
 }
 ```
+**range用法，见11 goroutine和并发**
+
 需要注意的是`Release`和`Close`方法使用同一个互斥锁上锁的，这样可以阻止这两个方法在不同 goroutine 里同时运行。
 看下如何在main.go中使用
+
 ```go
 package main
 
@@ -364,9 +388,25 @@ func performQueries(query int, p *pool.Pool) {
 }
 ```
 
+解释
+
+```
+&dbConnection{id} 是 Go 语言中的一种创建结构体指针的方式。这里 &dbConnection{id} 会创建一个 dbConnection 类型的新实例，并将它的地址返回，以满足 io.Closer 接口的需求
+
+- **`dbConnection{id}`**：使用结构体字面量语法创建 `dbConnection` 实例。在这个例子中，`{id}` 为 `dbConnection` 结构体中的 `ID` 字段赋值为 `id`（一个唯一的 `int32` 值）。
+- **`&` 符号**：`&` 符号在 Go 中用于取结构体的地址。通过 `&dbConnection{id}`，我们得到的是指向新创建的 `dbConnection` 实例的指针。
+- **返回值类型**：`createConnection()` 函数返回一个 `io.Closer` 类型的值。由于 `dbConnection` 实现了 `Close()` 方法，因此符合 `io.Closer` 接口，便可以作为该函数的返回值。
+
+**创建结构体实例后，取地址**
+```
+
+
+
 ## work
-work包的场景是多个 `goroutine` 等待一个work工作队列中派发来的工作任务，这些`goroutine`拿到任务后并发执行，执行完工作的`goroutine`回来继续等任务。在这种情况下，使用无缓冲的通道要比随意指定一个缓冲区大小的有缓冲的通道好，因为这个情况下既不需要一组 `goroutine` 配合执行，各干各的，来一个任务，任意一个goroutine领走去执行就完事了。  
+
+work包的场景是**多个 `goroutine` 等待一个work工作队列中派发来的工作任务，这些`goroutine`拿到任务后并发执行，执行完工作的`goroutine`回来继续等任务。在这种情况下，使用无缓冲的通道要比随意指定一个缓冲区大小的有缓冲的通道好，因为这个情况下既不需要一组 `goroutine` 配合执行，各干各的，来一个任务，任意一个goroutine领走去执行就完事了。**  
 lesson24的练习其实就是这种场景。
+
 ```go
 package work
 
@@ -460,3 +500,49 @@ func testWork() {
 	p.Shutdown()
 }
 ```
+
+## runner pool work区别
+
+在Go语言中，`runner`、`pool` 和 `work` 这三个概念一般是指与并发、任务执行、资源管理相关的模式或结构。让我们逐一解析它们的概念和用途。
+
+**1. Runner**
+
+`Runner`是一种任务管理模式，通常用于**执行一组有顺序或定时的任务**。你可以把它理解为一个“跑步的人”，负责在规定的时间内把任务“跑完”：
+
+- 它通常有一个运行的时间限制。
+- 如果任务超时，`runner`可以被强制停止。
+- 适合那些需要在特定时间内完成的任务，避免任务超时占用资源。
+
+比如：在一个活动中，我们给每个人分配一个“跑步时间”，到了时间就结束，不管任务是否完成。
+
+**2. Pool（连接池/资源池）**
+
+`Pool`是一个资源池，用于**管理一组可复用的资源**（比如数据库连接、线程等），用来避免频繁创建和销毁资源：
+
+- 在并发场景中，`pool`允许多个任务共享一组资源。
+- 这样可以减少资源开销，提高程序的性能。
+- 适用于高并发和需要高效资源管理的场景。
+
+比如：在餐厅里有一组固定的服务员（资源池），顾客（任务）来了就分配一个服务员，服务结束后服务员会重新回到队列服务下一位顾客。
+
+**3. Work（任务）**
+
+`Work`就是**具体的任务或工作单元**。可以理解为你希望在并发系统中执行的某个实际操作，比如发送邮件、处理订单等：
+
+- `Work`通常放入一个队列，等待`runner`或`pool`来执行。
+- `Work`是实际被执行的内容，可能是轻量的或耗时的任务。
+
+在编程中，我们将一个任务封装为`work`，然后交给`runner`或`pool`来安排执行，直到所有`work`都完成。
+
+**总结**
+
+```
+- **Runner**：负责在规定的时间内运行一组任务。
+- **Pool**：管理和复用一组资源，让多个任务共享。
+- **Work**：实际的任务内容，等待被执行。
+
+Runner像是一次性的任务执行者，完成后就"下班"了。
+Pool就像是一个管理员，负责管理一群可以重复使用的资源（可能是runner，也可能是worker）。
+Worker像是永不疲倦的工人，可以一直工作，处理源源不断的任务。
+```
+
