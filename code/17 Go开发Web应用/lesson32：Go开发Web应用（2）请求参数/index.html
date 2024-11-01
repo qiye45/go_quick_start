@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background: #d1f5dc
+        }
+
+        .main {
+            margin: 20px;
+        }
+    </style>
+    <title>Go开发Web应用入门（2）</title>
+</head>
+
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title h3">Registration</p>
+                        <form action="http://localhost:8080/register?userName=admin" method="post"
+                            enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="emailTxt">Email address: </label>
+                                <input id="emailTxt" type="email" class="form-control" name="email" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="userNameTxt">User Name</label>
+                                <input id="userNameTxt" type="text" class="form-control" name="userName"
+                                    placeholder="User Name">
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="checkOut"> Check me out
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="avatarFile" class="btn btn-secondary">Avatar</label>
+                                <input id="avatarFile" type="file" name="avatar" class="d-none"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
