@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-//TestDownload 确认 http 包的 Get 函数可以下载内容
+// TestDownload 确认 http 包的 Get 函数可以下载内容
 func TestDownload02(t *testing.T) {
 	var urls = []struct {
 		url        string

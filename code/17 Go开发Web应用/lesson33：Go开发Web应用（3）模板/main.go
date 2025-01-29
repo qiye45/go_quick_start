@@ -26,7 +26,7 @@ func main() {
 	//useLayout()
 }
 
-//示例1：使用模板
+// 示例1：使用模板
 func useTemplate() {
 	server := http.Server{
 		Addr: "localhost:8080",
@@ -40,7 +40,7 @@ func useTemplate() {
 	_ = server.ListenAndServe()
 }
 
-//示例2：使用多个模板
+// 示例2：使用多个模板
 func useTemplates() {
 	//加载所有模板
 	templateCollection := loadTmpl()
@@ -78,7 +78,7 @@ func loadTmpl() *template.Template {
 	return tmpls
 }
 
-//示例3：使用Action
+// 示例3：使用Action
 var templateCollection *template.Template
 
 func useAction() {
@@ -93,7 +93,7 @@ func useAction() {
 	_ = server.ListenAndServe()
 }
 
-//根据不同的请求路径，执行不同的模板
+// 根据不同的请求路径，执行不同的模板
 func action(w http.ResponseWriter, r *http.Request) {
 	routePath := strings.ToLower(r.URL.Path[8:])
 	if !strings.HasSuffix(routePath, ".html") {
@@ -119,7 +119,7 @@ func action(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//条件Action
+// 条件Action
 func ifAction(t *template.Template, w http.ResponseWriter, r *http.Request) {
 	rand.Seed(time.Now().Unix())
 	scope := 10
@@ -128,23 +128,23 @@ func ifAction(t *template.Template, w http.ResponseWriter, r *http.Request) {
 	_ = t.Execute(w, i > scope/2)
 }
 
-//迭代Aciton
+// 迭代Aciton
 func rangeAction(t *template.Template, w http.ResponseWriter, r *http.Request) {
 	daysOfWeek := []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sta", "Sun"}
 	t.Execute(w, daysOfWeek)
 }
 
-//【示例4】设置Action
+// 【示例4】设置Action
 func withAction(t *template.Template, w http.ResponseWriter, r *http.Request) {
 	_ = t.Execute(w, "hello")
 }
 
-//包含Action
+// 包含Action
 func NestingAction(t *template.Template, w http.ResponseWriter, r *http.Request) {
 	_ = t.Execute(w, "Hello gopher")
 }
 
-//示例5：模板函数的使用
+// 示例5：模板函数的使用
 func useFunc() {
 	server := http.Server{
 		Addr: "localhost:8080",
@@ -153,7 +153,7 @@ func useFunc() {
 	_ = server.ListenAndServe()
 }
 
-//模板函数的使用
+// 模板函数的使用
 func process(w http.ResponseWriter, r *http.Request) {
 	//step1: 创建FuncMap映射
 	funcMap := template.FuncMap{
@@ -166,13 +166,13 @@ func process(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, time.Now())
 }
 
-//自定义模板函数
+// 自定义模板函数
 func formatDate(t time.Time) string {
 	layout := "2006-01-02"
 	return t.Format(layout)
 }
 
-//示例6：layout的使用
+// 示例6：layout的使用
 func useLayout() {
 	server := http.Server{
 		Addr: "localhost:8080",

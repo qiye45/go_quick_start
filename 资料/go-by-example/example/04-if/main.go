@@ -21,4 +21,14 @@ func main() {
 	} else {
 		fmt.Println(num, "has multiple digits")
 	}
+	//if num:=9;num++;num>0{
+	//	fmt.Println(num)
+	//}
+	if num := 9; func() bool {
+		num++
+		return num > 0
+	}() {
+		fmt.Println(num)
+	}
+	//if 初始化语句; 条件表达式 {}
 }

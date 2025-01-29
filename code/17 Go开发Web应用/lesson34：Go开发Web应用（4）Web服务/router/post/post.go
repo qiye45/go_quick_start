@@ -30,7 +30,7 @@ func serializeJson(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-//getModel 返回一个model.Post变量
+// getModel 返回一个model.Post变量
 func getModel() model.Post {
 	return model.Post{
 		Id:      1,

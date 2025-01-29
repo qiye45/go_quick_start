@@ -7,7 +7,7 @@ import (
 
 func main() {
 	now := time.Now()
-	fmt.Println(now) // 2022-03-27 18:04:59.433297 +0800 CST m=+0.000087933
+	fmt.Println(now) // 2025-01-28 16:49:06.7526421 +0800 CST m=+0.001266701
 	t := time.Date(2022, 3, 27, 1, 25, 36, 0, time.UTC)
 	t2 := time.Date(2022, 3, 27, 2, 30, 36, 0, time.UTC)
 	fmt.Println(t)                                                  // 2022-03-27 01:25:36 +0000 UTC
@@ -21,5 +21,5 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(t3 == t)    // true
-	fmt.Println(now.Unix()) // 1648738080
+	fmt.Println(now.Unix()) // 1738054320
 }

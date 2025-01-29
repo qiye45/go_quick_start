@@ -28,7 +28,7 @@ var ErrTimeout = errors.New("received timeout")
 // ErrInterrupt 中断的错误，会在收到操作系统的中断事件时返回
 var ErrInterrupt = errors.New("received interrupt")
 
-//New 设定一个超时时间，返回一个新的准备使用的 Runner
+// New 设定一个超时时间，返回一个新的准备使用的 Runner
 func New(d time.Duration) *Runner {
 	return &Runner{
 		interrupt: make(chan os.Signal, 1),

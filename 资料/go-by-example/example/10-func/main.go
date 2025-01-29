@@ -18,7 +18,9 @@ func exists(m map[string]string, k string) (v string, ok bool) {
 func main() {
 	res := add(1, 2)
 	fmt.Println(res) // 3
-
-	v, ok := exists(map[string]string{"a": "A"}, "a")
+	temp := map[string]string{"a": "A"}
+	v, ok := exists(temp, "a")
+	fmt.Println(v, ok) // A True
+	v, ok = exists(temp, "b")
 	fmt.Println(v, ok) // A True
 }

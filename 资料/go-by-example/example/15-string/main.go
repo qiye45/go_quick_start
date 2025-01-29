@@ -12,6 +12,7 @@ func main() {
 	fmt.Println(strings.HasPrefix(a, "he"))               // true
 	fmt.Println(strings.HasSuffix(a, "llo"))              // true
 	fmt.Println(strings.Index(a, "ll"))                   // 2
+	fmt.Println(strings.Index(a, "ll00"))                 // -1
 	fmt.Println(strings.Join([]string{"he", "llo"}, "-")) // he-llo
 	fmt.Println(strings.Repeat(a, 2))                     // hellohello
 	fmt.Println(strings.Replace(a, "e", "E", -1))         // hEllo

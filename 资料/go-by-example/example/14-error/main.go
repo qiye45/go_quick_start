@@ -20,14 +20,18 @@ func findUser(users []user, name string) (v *user, err error) {
 }
 
 func main() {
-	u, err := findUser([]user{{"wang", "1024"}}, "wang")
+	users := []user{
+		{"wang", "123"},
+		{"li", "456"},
+	}
+	u, err := findUser(users, "wang")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println(u.name) // wang
 
-	if u, err := findUser([]user{{"wang", "1024"}}, "li"); err != nil {
+	if u, err := findUser(users, "li"); err != nil {
 		fmt.Println(err) // not found
 		return
 	} else {

@@ -12,8 +12,8 @@ import (
 
 func main() {
 	maxNum := 100
-	rand.Seed(time.Now().UnixNano())
-	secretNumber := rand.Intn(maxNum)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	secretNumber := r.Intn(maxNum)
 	// fmt.Println("The secret number is ", secretNumber)
 
 	fmt.Println("Please input your guess")

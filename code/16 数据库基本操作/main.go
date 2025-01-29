@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-//定义全局变量
+// 定义全局变量
 var db *sql.DB
 
 const (
@@ -83,7 +83,7 @@ func main() {
 	}
 }
 
-//initDb 初始化与连接
+// initDb 初始化与连接
 func initDb() error {
 	connStr :=
 		fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
@@ -107,7 +107,7 @@ func initDb() error {
 	return nil
 }
 
-//queryById 通过Id查询单笔数据
+// queryById 通过Id查询单笔数据
 func queryByID(id int) (entity testEntity, err error) {
 	entity = testEntity{}
 	sqlStr := "select t.id, t.msg, t.create_time from public.test t where t.id = $1"
@@ -115,7 +115,7 @@ func queryByID(id int) (entity testEntity, err error) {
 	return
 }
 
-//queryByDate 通过创建时间查询多笔数据
+// queryByDate 通过创建时间查询多笔数据
 func queryByDate(minDate time.Time) (entityCollection []testEntity, err error) {
 	sqlStr := "SELECT id, msg, create_time FROM public.test where create_time > $1"
 	rows, err := db.Query(sqlStr, minDate)
@@ -131,7 +131,7 @@ func queryByDate(minDate time.Time) (entityCollection []testEntity, err error) {
 	return
 }
 
-//updateEntity 更新操作
+// updateEntity 更新操作
 func updateEntity(entity testEntity) (newEntity testEntity, err error) {
 	sqlStr := "UPDATE public.test SET msg=$1, create_time=$2 WHERE id=$3"
 	_, err = db.Exec(sqlStr, entity.msg, time.Now(), entity.id)
@@ -142,7 +142,7 @@ func updateEntity(entity testEntity) (newEntity testEntity, err error) {
 	return
 }
 
-//insertEntities 插入多条数据，使用Prepare
+// insertEntities 插入多条数据，使用Prepare
 func insertEntities(entityCollection []testEntity) (err error) {
 	sqlStr :=
 		`
@@ -170,7 +170,7 @@ func insertEntities(entityCollection []testEntity) (err error) {
 	return
 }
 
-//execByTransaction 执行事务
+// execByTransaction 执行事务
 func execByTransaction(entity testEntity) (err error) {
 	tx, err := db.Begin() //开启事务
 	if err != nil {

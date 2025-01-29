@@ -24,14 +24,14 @@ type DBConf struct {
 	DBName   string
 }
 
-//App App的相关配置项
+// App App的相关配置项
 var App *tomlConf
 
 func init() {
 	App = new(tomlConf)
 }
 
-//Init 初始化配置文件
+// Init 初始化配置文件
 func Init(filePath string) {
 	_, err := toml.DecodeFile(filePath, App)
 	if err != nil {
