@@ -88,7 +88,7 @@ func query(word string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if resp.StatusCode != 200 {
+	if resp.StatusCode >= 300 {
 		log.Fatal("bad StatusCode:", resp.StatusCode, "body", string(bodyText))
 	}
 	var dictResponse DictResponse
