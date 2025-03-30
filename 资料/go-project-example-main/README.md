@@ -164,7 +164,6 @@ POST /community/post/do
 ## 学习资源
 
 项目包含了Go编程中的一些常见注意事项和并发编程示例，可以作为学习参考：
-
 - `attention/`: 包含字符串处理、JSON操作、闭包和数组处理的示例和测试
 - `concurrence/`: 包含goroutine和channel的示例代码和测试
 
