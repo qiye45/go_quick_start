@@ -147,6 +147,7 @@ POST /community/post/do
 ```
 
 Form parameters:
+
 - `uid`: User ID
 - `topic_id`: Topic ID
 - `content`: Post content
