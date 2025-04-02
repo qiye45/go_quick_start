@@ -23,7 +23,6 @@ This is a community forum system example project developed in Go, using the Gin 
 
 ## Project Structure
 
-
 ```
 .
 ├── attention/            # Example code for Go programming notes
@@ -64,8 +63,10 @@ This is a community forum system example project developed in Go, using the Gin 
 ### Prerequisites
 
 - Go 1.16+
-- MySQL 5.7+
-
+- MySQL 8.0+ 
+```
+docker run --name mysql8.0 -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql:8.0
+```
 ### Database Setup
 
 1. Create MySQL database and table structure:
