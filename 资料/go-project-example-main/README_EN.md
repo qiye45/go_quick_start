@@ -23,6 +23,7 @@ This is a community forum system example project developed in Go, using the Gin 
 
 ## Project Structure
 
+
 ```
 .
 ├── attention/            # Example code for Go programming notes
