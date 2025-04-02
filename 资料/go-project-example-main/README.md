@@ -63,7 +63,9 @@
 
 - Go 1.16+
 - MySQL 5.7+
-
+```
+docker run --name mysql5.7 -e MYSQL_ROOT_PASSWORD=123456 -p 3307:3306 -d mysql:5.7
+```
 ### 数据库设置
 
 1. 创建MySQL数据库和表结构：
