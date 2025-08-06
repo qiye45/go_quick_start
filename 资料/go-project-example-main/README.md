@@ -63,7 +63,9 @@
 
 - Go 1.16+
 - MySQL 5.7+
-
+```
+docker run --name mysql5.7 -e MYSQL_ROOT_PASSWORD=123456 -p 3307:3306 -d mysql:5.7
+```
 ### 数据库设置
 
 1. 创建MySQL数据库和表结构：
@@ -164,7 +166,6 @@ POST /community/post/do
 ## 学习资源
 
 项目包含了Go编程中的一些常见注意事项和并发编程示例，可以作为学习参考：
-
 - `attention/`: 包含字符串处理、JSON操作、闭包和数组处理的示例和测试
 - `concurrence/`: 包含goroutine和channel的示例代码和测试
 
