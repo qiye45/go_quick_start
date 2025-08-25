@@ -62,7 +62,7 @@ func main() {
 	c := merge(a, b)
 	// range 语句会遍历通道中的所有值，直到通道关闭。但是谁关闭了通道呢？
 	// 让我们在 Go 例程中添加一个 defer 语句，以确保通道最终被关闭。
-	// 请注意， defer 语句位于新的 goroutine 中调用的匿名函数内部，而不是 merge 内部。否则，一旦退出 merge ， c 就会被关闭，向其发送值会导致 panic。
+	// 请注意， defer 语句位于新的 goroutine 中调用的匿名函数内部，而不是 mergeAB 内部。否则，一旦退出 mergeAB ， c 就会被关闭，向其发送值会导致 panic。
 	for v := range c {
 		fmt.Println(v)
 	}
