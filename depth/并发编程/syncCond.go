@@ -31,13 +31,24 @@ func produce(x int) {
 	cond.Signal() // 唤醒一个消费者
 }
 
+func produceALL() {
+	mu.Lock()
+	for i := 0; i < 10; i++ {
+		queue = append(queue, i)
+	}
+	mu.Unlock()
+	// 唤醒所有消费者
+	cond.Broadcast()
+}
+
 func main() {
 	for i := 0; i < 3; i++ {
 		go consume(i)
 	}
-	for i := 0; i < 10; i++ {
-		produce(i)
-	}
+	//for i := 0; i < 10; i++ {
+	//	produce(i)
+	//}
+	produceALL()
 	for {
 	}
 }
